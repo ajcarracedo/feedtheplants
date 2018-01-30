@@ -2,12 +2,12 @@
 #include "Gsender.h"
 
 #pragma region Globals
-const char* ssid = "wifiwifiwifi"; // WIFI network name
-const char* password = "passwordpassword"; // WIFI network password
+const char* ssid = "Name of my WIFI";
+const char* password = "Password of my WIFI";
 uint8_t connection_state = 0;                    // Connected to WIFI or not
 uint16_t reconnect_interval = 10000;             // If not connected wait time to try again
 #pragma endregion Globals
- int contador = 0;
+int contador = 0;
 uint8_t WiFiConnect(const char* nSSID = nullptr, const char* nPassword = nullptr)
 {
   static uint16_t attempt = 0;
@@ -71,24 +71,30 @@ void setup()
     Serial.println(gsender->getError());
   }
 
-   
+
 }
 
 void loop() {
 
   Serial.print("funciona ");
   Serial.println(contador);
-  contador = contador+1;
+  contador = contador + 1;
   int sensorValue = digitalRead(2);
-  //if (HIGH == digitalRead(2)) //GPIO2
-  //{
-   // Serial.println("HIGH");
-  //}
-  //else
-  //{
-   // Serial.println("HIGH");
-  //  }
-Serial.println(sensorValue, DEC);
+  String stringValue = String(sensorValue, DEC);
+  Serial.println(stringValue);
+
+  if (stringValue == "0")
+  {
+    Gsender *gsender = Gsender::Instance();    // Getting pointer to class instance
+    String subject = "Alimentoooooo!";
+    if (gsender->Subject(subject)->Send("ajcarracedo@gmail.com", "Que me mueroooo")) {
+      Serial.println("Message send.");
+    } else {
+      Serial.print("Error sending message: ");
+      Serial.println(gsender->getError());
+    }
+  }
+
   delay(5000);
 }
 
